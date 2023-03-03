@@ -9,7 +9,7 @@ class Power{
     float damage;
 
 public:
-    const float get_dmg() const{ return damage;}
+    float get_dmg() const{ return damage;}
     Power(const std::string& name_="power", const std::string& description_="-", const std::string& power_type_="-", float damage_=0){
         this->name = name_;
         this->description = description_;
@@ -62,7 +62,10 @@ public:
         return attack.get_dmg()*damage_dealt_modifier;
     }
     void take_damage(float damage_){
-        HP = std::max(HP -= damage_*damage_taken_modifier, 0.f);
+        HP -= damage_*damage_taken_modifier;
+        if(HP<0){
+            HP=0;
+        }
     }
     void heal(float healing_value){
         HP += healing_value;
@@ -73,10 +76,10 @@ public:
     void update_damage_dealt_modifier(float modifier){
         damage_dealt_modifier *= modifier;
     }
-    void reset_damage_taken_modifier(float modifier){
+    void reset_damage_taken_modifier(){
         damage_taken_modifier = 1;
     }
-    void reset_damage_dealt_modifier(float modifier){
+    void reset_damage_dealt_modifier(){
         damage_dealt_modifier = 1;
     }
 
@@ -107,11 +110,12 @@ public:
     ~Pokemon(){}
 
 };
-class Potiune{
-    std::string potion_name;
-public:
-    void apply_effect(Pokemon *poke){}
-};
+//class Potiune{
+    //std::string potion_name;
+//public:
+    //void apply_effect(Pokemon *poke){}
+//};
+//Aici aveam un warning de unused parameter
 //class Potiune_Heal : public Potiune{
 //    float healing_value;
 //public:
