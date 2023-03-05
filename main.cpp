@@ -63,7 +63,7 @@ public:
     }
     void take_damage(float damage_){
         HP -= damage_*damage_taken_modifier;
-        if(HP<0){
+        if(HP<0.f){
             HP=0;
         }
     }
@@ -77,10 +77,10 @@ public:
         damage_dealt_modifier *= modifier;
     }
     void reset_damage_taken_modifier(){
-        damage_taken_modifier = 1;
+        damage_taken_modifier = 1.f;
     }
     void reset_damage_dealt_modifier(){
-        damage_dealt_modifier = 1;
+        damage_dealt_modifier = 1.f;
     }
 
     Pokemon(const std::string& name_, const std::string& type_, const Power& attack_, const std::string& weakness_,const std::string& resistance_, int retreat_cost_,float HP_, float length_, int weight_, float damage_taken_modifier_ = 1, float damage_dealt_modifier_ = 1):
