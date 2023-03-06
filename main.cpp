@@ -56,8 +56,8 @@ class Pokemon {
 
 public:
 
-    float get_HP() const{return HP;}
-    bool is_alive() const{ return HP>0.f;}
+    [[nodiscard]] float get_HP() const{return HP;}
+    [[nodiscard]] bool is_alive() const{ return HP>0.f;}
     float get_attack_damage(){
         return attack.get_dmg()*damage_dealt_modifier;
     }
@@ -145,12 +145,12 @@ public:
 
 int main() {
 
-    Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30);
-    Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36);
-    Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35);
-    Pokemon pika("Pikachu","Lightning",power_pikachu,"Earth","-",10,50.f,0.4064,13);
-    Pokemon bulb("Bulbasaur","Earth",power_bulbasaur,"Fire","-",10,60.f,0.7112,15);
-    Pokemon charm("Charmander","Fire",power_charmander,"Water","-",10,50.f,0.6096,19);
+    Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f);
+    Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36.f);
+    Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35.f);
+    Pokemon pika("Pikachu","Lightning",power_pikachu,"Earth","-",10,50.f,0.4064f,13);
+    Pokemon bulb("Bulbasaur","Earth",power_bulbasaur,"Fire","-",10,60.f,0.7112f,15);
+    Pokemon charm("Charmander","Fire",power_charmander,"Water","-",10,50.f,0.6096f,19);
     Carte c_pika("Holographic",1,pika);
     Carte c_bulb("Basic",1,bulb);
     c_bulb=c_pika;
