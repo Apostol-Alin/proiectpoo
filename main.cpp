@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-//#include <SFML/Graphics.hpp>
 //#include <random>
 //class Actiune{
 //    std::string type;
@@ -67,9 +66,8 @@ class Pokemon {
     float damage_dealt_modifier;
     int energy;
     int total_energy;
-
     [[nodiscard]] const Power* get_power(unsigned int i) const{
-        return &attack.at(i);
+        return &attack.at(i-1);
     }
 
 public:
@@ -81,7 +79,7 @@ public:
 //        return get_power(i)->get_dmg();
 //    }
     void take_damage(float damage_){
-        HP -= damage_*damage_taken_modifier;
+        HP -= damage_ * damage_taken_modifier;
         if(HP < 0.f){
             HP = 0;
         }
@@ -93,6 +91,7 @@ public:
     }
     const Power* choose_attack(){
         std::cout<<"Current energy: "<<energy<<"\n";
+        std::cout<<"Please choose an attack:\n";
         unsigned int i = 1;
         for(const auto & a : attack){
             std::cout<<i<<". "<<a.get_name()<<"\t"<<"Energy cost: "<<a.get_energy_cost()<<"\n";
@@ -107,7 +106,11 @@ public:
         else
             throw std::logic_error("Not enough energy\n");
     }
-    std::vector <const Power*>* choose_combo(){
+    std::vector <const Power*> choose_combo(){
+        //vreau, de fapt std::vector <const Power*>* choose_combo
+        //si sa returnez &combos
+        //insa primesc warning ca returnez referinta
+        //catre ceva pus pe stack
         std::vector <const Power*> combos;
         const Power * chosen_power = nullptr;
         unsigned int i;
@@ -133,15 +136,16 @@ public:
                         std::cout<<"Choose an attack to remove from your combo:\n";
                         for(const auto & a : combos){
                             std::cout<<k+1<<"."<<a->get_name()<<"\n";
+                            k++;
                         }
                         std::cin >> k;
                         energy += combos.at(k-1)->get_energy_cost();
-                        combos.erase(combos.begin()+k);
+                        combos.erase(combos.begin()+k-1);
                         break;
                     }
                     case 3: {
                         if(!combos.empty())
-                            return &combos;
+                            return combos;
                         else
                             std::cout<<"The combo is empty\n Please choose at least one attack!\n";
                     }
@@ -210,7 +214,7 @@ public:
         return *this;
     }
     friend std::ostream& operator<<(std::ostream& os, const Pokemon& p){
-        os<<"Name: "<<p.name<<"\t"<<"Pokemon type: "<<p.type<<"\t"<<"HP: "<<p.HP<<"\tEnergy"<<p.energy<<"\n";
+        os<<"Name: "<<p.name<<"\n"<<"Pokemon type: "<<p.type<<"\n"<<"HP: "<<p.HP<<"\tEnergy: "<<p.energy<<"\n";
         os<<"Attacks:\n";
         for(const auto & k: p.attack){
             os<<"\t"<<k<<"\n";
@@ -275,7 +279,7 @@ public:
     [[nodiscard]] int get_energy() const{ return total_energy;}
     void update_money(int cost){ money -= cost;}
     void update_total_energy(int energy_cost){ total_energy -= energy_cost;}
-    Player(std::vector <Carte>& c_, int total_energy_ = 100, int money_ = 200) : c(c_), total_energy(total_energy_), money(money_){}
+    explicit Player(std::vector <Carte>& c_, int total_energy_ = 100, int money_ = 200) : c(c_), total_energy(total_energy_), money(money_){}
     Player(const Player& other)= default;
     Player& operator=(const Player&other)= default;
     ~Player() = default;
@@ -283,9 +287,9 @@ public:
 
 int main() {
 
-    Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f);
-    Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36.f);
-    Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35.f);
+    Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f,35);
+    Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36.f,25);
+    Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35.f,30);
     std::vector <Power> puteri_pikachu;
     puteri_pikachu.emplace_back(power_pikachu);
     std::vector <Power> puteri_bulb;
@@ -307,6 +311,7 @@ int main() {
     std::cout<<bulb<<"\n";
     std::cout<<"\n";
     std::cout<<"HP Pikachu inainte de a lua damage: "<<pika.get_HP()<<"\n";
+    pika.take_damage(20.f);
     std::cout<<"HP Pikachu dupa ce a luat damage: "<<pika.get_HP()<<"\n";
     pika.heal(30.f);
     std::cout<<"HP Pikachu dupa heal: "<<pika.get_HP()<<"\n";
@@ -315,8 +320,14 @@ int main() {
     bulb.update_damage_taken_modifier(1.5f);
     bulb.reset_damage_dealt_modifier();
     bulb.reset_damage_taken_modifier();
-
-
+    //*********************
+    //scoateti comentariile si rulati pentru a creea un combo de attackuri pentru pikachu
+//    float dmg = 0.f;
+//    std::vector <const Power*> combo = (pika.choose_combo());
+//    for(const auto & k : combo){
+//        dmg += k->get_dmg();
+//    }
+//    std::cout<<dmg;
     return 0;
 
 }
