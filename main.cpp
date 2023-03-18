@@ -155,9 +155,11 @@ public:
                             return combos;
                         else
                             std::cout<<"The combo is empty\n Please choose at least one attack!\n";
+                        break;
                     }
                     default: {
                         std::cout << "Invalid option\n";
+                        break;
                     }
                 }
             }
