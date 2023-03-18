@@ -282,6 +282,13 @@ public:
     explicit Player(std::vector <Carte>& c_, int money_ = 200) : c(c_), money(money_){}
     Player(const Player& other)= default;
     Player& operator=(const Player&other)= default;
+    friend std::ostream& operator<<(std::ostream& os, const Player& p){
+        os<<"Money: "<<p.money<<'\n';
+        for(const auto & k : p.c){
+            os<<k<<'\n';
+        }
+        return os;
+    }
     ~Player() = default;
 };
 
