@@ -322,13 +322,13 @@ int main() {
     pika.check_weakness_resistance(power_bulbasaur);
     //*********************
     //rulati pentru a creea un combo de attackuri pentru pikachu
-//    float dmg = 0.f;
-//    std::vector <const Power*> combo = (pika.choose_combo());
-//    for(const auto & k : combo){
-//        dmg += k->get_dmg();
-//    }
+    float dmg = 0.f;
+    std::vector <const Power*> combo = (pika.choose_combo());
+    for(const auto & k : combo){
+        dmg += k->get_dmg();
+    }
     pika.restore_energy();
-    //std::cout<<dmg;
+    std::cout<<dmg<<'\n';
     std::cout<<power_bulbasaur.get_dmg()<<'\n';
     std::vector<Carte> c;
     c.emplace_back(c_bulb);
