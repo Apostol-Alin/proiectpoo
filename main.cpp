@@ -78,6 +78,12 @@ public:
 //    [[nodiscard]] float get_attack_damage(unsigned int i) const{
 //        return get_power(i)->get_dmg();
 //    }
+    void check_weakness_resistance(const Power& p){
+        if(this->weakness == p.get_power_type())
+            update_damage_taken_modifier(0.9f);
+        if(this->resistance ==  p.get_power_type())
+            update_damage_taken_modifier(1.1f);
+    }
     void take_damage(float damage_){
         HP -= damage_ * damage_taken_modifier;
         if(HP < 0.f){
@@ -89,7 +95,7 @@ public:
         if(energy > total_energy)
             energy = total_energy;
     }
-    const Power* choose_attack(){
+    [[maybe_unused]] const Power* choose_attack(){
         std::cout<<"Current energy: "<<energy<<"\n";
         std::cout<<"Please choose an attack:\n";
         unsigned int i = 1;
@@ -106,7 +112,8 @@ public:
         else
             throw std::logic_error("Not enough energy\n");
     }
-    std::vector <const Power*> choose_combo(){
+
+    [[maybe_unused]] std::vector <const Power*> choose_combo(){
         //vreau, de fapt std::vector <const Power*>* choose_combo
         //si sa returnez &combos
         //insa primesc warning ca returnez referinta
@@ -177,12 +184,6 @@ public:
     }
     void update_damage_dealt_modifier(float modifier){
         damage_dealt_modifier *= modifier;
-    }
-    void check_weakness_resistance(const Power& p){
-        if(this->weakness == p.get_power_type())
-            update_damage_taken_modifier(0.9f);
-        if(this->resistance ==  p.get_power_type())
-            update_damage_taken_modifier(1.1f);
     }
     void reset_damage_taken_modifier(){
         damage_taken_modifier = 1.f;
@@ -272,14 +273,11 @@ public:
 //};
 class Player{
     std::vector <Carte> c;
-    int total_energy;
     int money;
 public:
     [[nodiscard]] int get_money() const{ return money;}
-    [[nodiscard]] int get_energy() const{ return total_energy;}
     void update_money(int cost){ money -= cost;}
-    void update_total_energy(int energy_cost){ total_energy -= energy_cost;}
-    explicit Player(std::vector <Carte>& c_, int total_energy_ = 100, int money_ = 200) : c(c_), total_energy(total_energy_), money(money_){}
+    explicit Player(std::vector <Carte>& c_, int money_ = 200) : c(c_), money(money_){}
     Player(const Player& other)= default;
     Player& operator=(const Player&other)= default;
     ~Player() = default;
@@ -316,18 +314,27 @@ int main() {
     pika.heal(30.f);
     std::cout<<"HP Pikachu dupa heal: "<<pika.get_HP()<<"\n";
     std::cout<<"Is Pikachu still alive after that?:  "<<pika.is_alive()<<"\n";
+    std::cout<<pika.get_energy()<<'\n';
     bulb.update_damage_dealt_modifier(2.f);
     bulb.update_damage_taken_modifier(1.5f);
     bulb.reset_damage_dealt_modifier();
     bulb.reset_damage_taken_modifier();
+    pika.check_weakness_resistance(power_bulbasaur);
     //*********************
-    //scoateti comentariile si rulati pentru a creea un combo de attackuri pentru pikachu
+    //rulati pentru a creea un combo de attackuri pentru pikachu
 //    float dmg = 0.f;
 //    std::vector <const Power*> combo = (pika.choose_combo());
 //    for(const auto & k : combo){
 //        dmg += k->get_dmg();
 //    }
-//    std::cout<<dmg;
+    pika.restore_energy();
+    //std::cout<<dmg;
+    std::cout<<power_bulbasaur.get_dmg()<<'\n';
+    std::vector<Carte> c;
+    c.emplace_back(c_bulb);
+    Player player1(c,3000);
+    player1.update_money(20);
+    std::cout<<player1.get_money();
     return 0;
 
 }
