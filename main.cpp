@@ -66,8 +66,8 @@ class Pokemon {
     float damage_dealt_modifier;
     int energy;
     int total_energy;
-    [[nodiscard]] const Power* get_power(unsigned int i) const{
-        return &attack.at(i-1);
+    [[nodiscard]] Power get_power(unsigned int i) const{
+        return attack.at(i-1);
     }
 
 public:
@@ -95,7 +95,7 @@ public:
         if(energy > total_energy)
             energy = total_energy;
     }
-    [[maybe_unused]] const Power* choose_attack(){
+    [[maybe_unused]] Power choose_attack(){
         std::cout<<"Current energy: "<<energy<<"\n";
         std::cout<<"Please choose an attack:\n";
         unsigned int i = 1;
@@ -104,28 +104,24 @@ public:
             i++;
         }
         std::cin >> i;
-        const Power * temp = get_power(i);
-        if(temp->get_energy_cost() <= energy){
-            energy -= temp->get_energy_cost();
-            return get_power(i);
+        const Power temp = get_power(i);
+        if(temp.get_energy_cost() <= energy){
+            energy -= temp.get_energy_cost();
+            return temp;
         }
         else
             throw std::logic_error("Not enough energy\n");
     }
-
-    [[maybe_unused]] std::vector <const Power*> choose_combo(){
-        //vreau, de fapt std::vector <const Power*>* choose_combo
-        //si sa returnez &combos
-        //insa primesc warning ca returnez referinta
-        //catre ceva pus pe stack
-        std::vector <const Power*> combos;
-        const Power * chosen_power = nullptr;
-        unsigned int i;
-        chosen_power = choose_attack();
+    [[maybe_unused]] float choose_combo(){
+        std::vector <Power> combos;
+        Power chosen_power = choose_attack();
         combos.emplace_back(chosen_power);
+        float total_damage = chosen_power.get_dmg();
+        unsigned int i;
         do{
-//            combo_attack:
-//            1st step -> choose an atack and create the vector of attacks
+//          combo_attack:
+//          1st step -> choose an atack and create the vector of attacks
+            std::cout << "Current energy:" << energy << "\n";
             std::cout << "Choose an action:\n";
             std::cout << "1. Add attack to combo\n";
             std::cout << "2. Remove attack from combo\n";
@@ -135,6 +131,7 @@ public:
                 switch (i) {
                     case 1: {
                         chosen_power = choose_attack();
+                        total_damage += chosen_power.get_dmg();
                         combos.emplace_back(chosen_power);
                         break;
                     }
@@ -142,17 +139,18 @@ public:
                         unsigned int k = 0;
                         std::cout<<"Choose an attack to remove from your combo:\n";
                         for(const auto & a : combos){
-                            std::cout<<k+1<<"."<<a->get_name()<<"\n";
+                            std::cout<<k+1<<"."<<a.get_name()<<"\n";
                             k++;
                         }
                         std::cin >> k;
-                        energy += combos.at(k-1)->get_energy_cost();
+                        energy += combos.at(k-1).get_energy_cost();
+                        total_damage -= combos.at(k-1).get_dmg();
                         combos.erase(combos.begin()+k-1);
                         break;
                     }
                     case 3: {
                         if(!combos.empty())
-                            return combos;
+                            return total_damage;
                         else
                             std::cout<<"The combo is empty\n Please choose at least one attack!\n";
                         break;
@@ -274,17 +272,17 @@ public:
 //
 //};
 class Player{
-    std::vector <Carte> c;
+    std::vector <Carte> cards;
     int money;
 public:
     [[nodiscard]] int get_money() const{ return money;}
     void update_money(int cost){ money -= cost;}
-    explicit Player(std::vector <Carte>& c_, int money_ = 200) : c(c_), money(money_){}
+    explicit Player(std::vector <Carte>& cards_, int money_ = 200) : cards(cards_), money(money_){}
     Player(const Player& other)= default;
     Player& operator=(const Player&other)= default;
     friend std::ostream& operator<<(std::ostream& os, const Player& p){
         os<<"Money: "<<p.money<<'\n';
-        for(const auto & k : p.c){
+        for(const auto & k : p.cards){
             os<<k<<'\n';
         }
         return os;
@@ -313,7 +311,7 @@ int main() {
     std::cout<<c_pika<<"\n";
     std::cout<<c_bulb<<"\n";
     std::cout<<bulb<<"\n";
-    power_bulbasaur=power_charmander;
+    power_bulbasaur = power_charmander;
     std::cout<<power_bulbasaur<<"\n";
     std::cout<<bulb<<"\n";
     std::cout<<"\n";
@@ -331,13 +329,9 @@ int main() {
     pika.check_weakness_resistance(power_bulbasaur);
     //*********************
 //    rulati pentru a creea un combo de attackuri pentru pikachu
-    float dmg = 0.f;
-    std::vector <const Power*> combo = (pika.choose_combo());
-    for(const auto & k : combo){
-        dmg += k->get_dmg();
-    }
+    std::cout << pika.choose_combo();
+    std::cout << ": Damage dealt from combo\n";
     pika.restore_energy();
-    std::cout<<dmg<<'\n';
     std::cout<<power_bulbasaur.get_dmg()<<'\n';
     std::vector<Carte> c;
     c.emplace_back(c_bulb);
@@ -347,3 +341,4 @@ int main() {
     return 0;
 
 }
+
