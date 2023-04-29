@@ -58,7 +58,7 @@
 	RLUTIL_INLINE void locate(int x, int y); // Forward declare for C to avoid warnings
 #endif // __cplusplus
 
-int runs_on_ci() {
+RLUTIL_INLINE int runs_on_ci() {
 	return
 	#ifdef __cplusplus
 	std::getenv("GITHUB_ACTIONS") != nullptr;
