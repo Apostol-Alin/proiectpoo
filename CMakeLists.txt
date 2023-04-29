@@ -80,7 +80,7 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp Power.cpp Power.h Pokemon.cpp Pokemon.h Carte.cpp Carte.h Player.cpp Player.h Potion.cpp Potion.h Healing_Potion.cpp Healing_Potion.h)
+add_executable(${PROJECT_NAME} main.cpp Power.cpp Power.h Pokemon.cpp Pokemon.h Carte.cpp Carte.h Player.cpp Player.h Potion.cpp Potion.h Healing_Potion.cpp Healing_Potion.h ext/include/random/random.hpp)
 
 ###############################################################################
 
