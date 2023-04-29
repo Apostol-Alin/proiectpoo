@@ -10,7 +10,7 @@
 #include "Player.h"
 #include "Potion.h"
 #include "Healing_Potion.h"
-
+#include <chrono>
 void entry_message(){
     rlutil::setColor(14);
     std::cout << "Welcome to:\n";
@@ -37,13 +37,13 @@ class map{
         layout.resize(map_size);
         for(auto& v: layout)
             v.resize(map_size);
-        int i, j;
+        unsigned int i, j;
         for (j = 0; j < map_size; j++) {
             for (i = 0; i < map_size; i++) {
                 if (i == 0 or i == map_size - 1 or j == 0 or j == map_size - 1)
                     layout[i][j] = "%";
                 else{
-                    if(rand() % 6 == 0)
+                    if(rand() % 6 == 0 and i != 1 and j != 1)
                         layout[i][j] = "P";
                     else
                         layout[i][j] = ".";
@@ -190,6 +190,8 @@ int main() {
     p1.update_score(v_poke[0]);
     std::cout << p1;
     std::cout << p2;
+    std::cout << pika.get_card().get_stage() << "\n";
+    pika.get_card().increase_stage();
     m1.start_game();
     return 0;
 }
