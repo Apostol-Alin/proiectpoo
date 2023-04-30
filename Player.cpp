@@ -27,9 +27,14 @@ void Player::heal_pokemoni() {
         unsigned int k = 0;
         for (const auto& pot: potions) {
             if (auto current = std::dynamic_pointer_cast<Healing_Potion>(pot)) {
-                if(pokemon.get_HP() < pokemon.get_max_HP()){
-                    pot->apply_effect(pokemon);
-                    potions.erase(potions.begin()+k);
+                if(pokemon.get_HP() != pokemon.get_max_HP()){
+                    current->apply_effect(pokemon);
+                    unsigned int i = k;
+                    while(i < potions.size() - 1) {
+                        potions[i] = potions[i + 1];
+                        i++;
+                    }
+                    potions.resize(potions.size()-1);
                     k--;
                 }
             }
