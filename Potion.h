@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include "Pokemon.h"
+#include <rlutil.h>
 class Potion {
     std::string potion_name;
     int potion_cost;
@@ -23,7 +24,7 @@ public:
     virtual void apply_effect(Pokemon& poke) const = 0;
     virtual void turn_old() = 0;
     virtual void increase_turn_counter();
-    virtual bool old_enough() const;
+    [[nodiscard]] virtual bool old_enough() const;
     virtual ~Potion();
 };
 

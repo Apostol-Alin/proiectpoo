@@ -24,6 +24,7 @@ class Pokemon {
 public:
 
     [[nodiscard]] float get_HP() const;
+    [[nodiscard]] float get_max_HP() const;
     [[nodiscard]] bool is_alive() const;
     [[nodiscard]] int get_energy() const;
     [[nodiscard]] Carte get_card() const;

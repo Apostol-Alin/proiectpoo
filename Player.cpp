@@ -22,6 +22,22 @@ void Player::add_potion(const std::shared_ptr<Potion>& new_pot){
         potions.emplace_back(new_pot);
 }
 
+void Player::heal_pokemoni() {
+    for(auto &pokemon : pokemoni){
+        unsigned int k = 0;
+        for (const auto& pot: potions) {
+            if (auto current = std::dynamic_pointer_cast<Healing_Potion>(pot)) {
+                if(pokemon.get_HP() < pokemon.get_max_HP()){
+                    pot->apply_effect(pokemon);
+                    potions.erase(potions.begin()+k);
+                    k--;
+                }
+            }
+            k++;
+        }
+    }
+}
+
 //void Player::choose_potion(Pokemon &poke){
 //
 //}
@@ -32,7 +48,11 @@ void Player::add_potion(const std::shared_ptr<Potion>& new_pot){
 
 void Player::update_money(int value){ money += value; }
 
-void Player::update_score(const Pokemon& poke) {score += Player::bonus_score(poke); }
+void Player::update_score() {
+    score = 0;
+    for(const auto& pokemon: pokemoni)
+        score += bonus_score(pokemon);
+}
 
 Player::Player(std::string& player_name_, std::vector <Pokemon>& pokemoni_,std::vector<std::shared_ptr<Potion>> potions_, int money_ , int score_) : player_name(player_name_),pokemoni(pokemoni_),potions(std::move(potions_)), money(money_), score(score_){}
 Player::Player(const Player& other) : player_name(other.player_name), pokemoni(other.pokemoni), money(other.money), score(other.score){
@@ -54,9 +74,11 @@ void swap(Player& p1, Player& p2){
 std::ostream& operator<<(std::ostream& os, const Player& p){
     os << "Player: " << p.player_name << "\n";
     os << "Money: "<< p.money << " Score: " << p.score << "\n";
+    os << "\nPokemons:\n";
     for(const auto & k : p.pokemoni){
-        os << k.get_name() << '\n';
+        os << k.get_name() << " HP:" << k.get_HP() << "\n";
     }
+    os << "\nPotions:\n";
     for(const auto & pot: p.potions){
         os << *pot << "\n";
     }

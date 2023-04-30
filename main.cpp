@@ -11,20 +11,9 @@
 #include "Potion.h"
 #include "Healing_Potion.h"
 #include <chrono>
-void entry_message(){
-    rlutil::setColor(14);
-    std::cout << "Welcome to:\n";
-    rlutil::msleep(2000);
-    rlutil::setColor(11);
-    std::cout <<"              _                              \n"
-                "  _ __   ___ | | _____ _ __ ___   ___  _ __  \n"
-                " | '_ \\ / _ \\| |/ / _ \\ '_ ` _ \\ / _ \\| '_ \\ \n"
-                " | |_) | (_) |   <  __/ | | | | | (_) | | | |\n"
-                " | .__/ \\___/|_|\\_\\___|_| |_| |_|\\___/|_| |_|\n"
-                " |_|                                         ";
-    std::cout << "\n";
-    rlutil::msleep(2000);
-}
+#include "Energy_Potion.h"
+#include "Hazard_Potion.h"
+#include "Curse_Potion.h"
 
 class map{
     static const int map_size = 10;
@@ -33,6 +22,46 @@ class map{
     Player player;
     int x_player;
     int y_player;
+    void draw(){
+        rlutil::cls();
+        //rlutil::locate(1, map_size + 1);
+        rlutil::setColor(2);
+        std::cout << "Score: " << player.get_score() << "\n";
+        rlutil::setColor(14);
+        std::cout << "Money: " << player.get_money() << "\n";
+        rlutil::setColor(15);
+        //rlutil::locate(1, 1);
+        int i, j;
+        for (j = 0; j < map_size; j++) {
+            for (i = 0; i < map_size; i++) {
+                if(i == x_player and j == y_player)
+                {rlutil::setColor(11); std::cout << " @ "; rlutil::setColor(15);}
+                else if (layout[i][j] == ".") std::cout << " . ";
+                else if (layout[i][j] == "P") {rlutil::setColor(12); std::cout << " P "; rlutil::setColor(15);}
+                else if (layout[i][j] == "%"){rlutil::setColor(2); std::cout << " % "; rlutil::setColor(15);}
+                else {rlutil::setColor(12); rlutil::setBackgroundColor(7); std::cout << " D "; rlutil::setBackgroundColor(0); rlutil::setColor(15);}
+            }
+            std::cout << "\n";
+        }
+    }
+    static void entry_message(){
+        rlutil::setColor(14);
+        std::cout << "Welcome to:\n";
+        rlutil::msleep(2000);
+        rlutil::setColor(11);
+        std::cout <<"              _                              \n"
+                    "  _ __   ___ | | _____ _ __ ___   ___  _ __  \n"
+                    " | '_ \\ / _ \\| |/ / _ \\ '_ ` _ \\ / _ \\| '_ \\ \n"
+                    " | |_) | (_) |   <  __/ | | | | | (_) | | | |\n"
+                    " | .__/ \\___/|_|\\_\\___|_| |_| |_|\\___/|_| |_|\n"
+                    " |_|                                         ";
+        std::cout << "\n";
+        rlutil::msleep(2000);
+        rlutil::hidecursor();
+        rlutil::setColor(14);
+        std::cout << "Arcade Fighting simulator\n";
+        rlutil::msleep(2000);
+    }
     void gen() {
         layout.resize(map_size);
         for(auto& v: layout)
@@ -55,31 +84,9 @@ class map{
 //
 //    }d
 public:
-
-    void draw(){
-        rlutil::cls();
-        //rlutil::locate(1, map_size + 1);
-        rlutil::setColor(2);
-        std::cout << "Score: " << player.get_score() << "\n";
-        rlutil::setColor(14);
-        std::cout << "Money: " << player.get_money() << "\n";
-        rlutil::setColor(15);
-        //rlutil::locate(1, 1);
-        int i, j;
-        for (j = 0; j < map_size; j++) {
-            for (i = 0; i < map_size; i++) {
-                if(i == x_player and j == y_player)
-                    {rlutil::setColor(11); std::cout << " @ "; rlutil::setColor(15);}
-                else if (layout[i][j] == ".") std::cout << " . ";
-                else if (layout[i][j] == "P") {rlutil::setColor(12); std::cout << " P "; rlutil::setColor(15);}
-                else if (layout[i][j] == "%"){rlutil::setColor(2); std::cout << " % "; rlutil::setColor(15);}
-                else {rlutil::setColor(12); rlutil::setBackgroundColor(7); std::cout << " D "; rlutil::setBackgroundColor(0); rlutil::setColor(15);}
-            }
-            std::cout << "\n";
-        }
-    }
     void start_game(){
         gen();
+        entry_message();
         rlutil::setColor(2);
         std::cout << "Use WSAD keys to move and 0 to exit the game\n";
         rlutil::setColor(6);
@@ -158,11 +165,6 @@ int main() {
     p->apply_effect(pika);
     std::cout << "\n"<< pika.get_HP() << "\n";
     std::cout << Potionheal1;
-    rlutil::hidecursor();
-    entry_message();
-    rlutil::setColor(14);
-    std::cout << "Arcade Fighting simulator\n";
-    rlutil::msleep(2000);
     for (int i = 0; i < 16; i++) {
         rlutil::setColor(i);
         std::cout << i << " ";
@@ -187,12 +189,29 @@ int main() {
     Player p2{p1};
     p2.add_potion(Potionheal1.clone());
     p1.update_money(10);
-    p1.update_score(v_poke[0]);
+    p1.update_score();
+    p2.update_score();
     std::cout << p1;
     std::cout << p2;
     std::cout << pika.get_card().get_stage() << "\n";
     pika.get_card().increase_stage();
+    Energy_Potion energ{"RedBull",20,5,50};
+    std::cout << energ;
+    Hazard_Potion haz{"Plague",25,4,20};
+    std::cout << haz;
+    Curse_Potion curse{"Mistery Potion", 10, 6, 70, 15};
     m1.start_game();
+    std::cout << curse;
+    std::cout << pika.get_HP() << "\n";
+    curse.apply_effect(pika);
+    std::cout << pika.get_HP();
+    p1.add_potion(Potionheal1.clone());
+    p1.add_potion(energ.clone());
+    p1.add_potion(haz.clone());
+    p1.add_potion(curse.clone());
+    std::cout << p1;
+    p1.heal_pokemoni();
+    std::cout << p1;
     return 0;
 }
 

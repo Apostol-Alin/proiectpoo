@@ -14,6 +14,8 @@
 
 [[nodiscard]] float Pokemon::get_HP() const{ return HP;}
 
+[[nodiscard]] float Pokemon::get_max_HP() const { return max_HP;}
+
 [[nodiscard]] bool Pokemon::is_alive() const{ return HP > 0.f;}
 
 [[nodiscard]] int Pokemon::get_energy() const{ return total_energy;}
