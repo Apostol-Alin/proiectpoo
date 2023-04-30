@@ -24,9 +24,9 @@ void Player::add_potion(const std::shared_ptr<Potion>& new_pot){
 
 void Player::heal_pokemoni() {
     for(auto &pokemon : pokemoni){
-        unsigned int k = 0;
-        for (const auto& pot: potions) {
-            if (auto current = std::dynamic_pointer_cast<Healing_Potion>(pot)) {
+        unsigned int k;
+        for(k = 0; k < potions.size(); k++){
+            if (auto current = std::dynamic_pointer_cast<Healing_Potion>(potions[k])){
                 if(pokemon.get_HP() != pokemon.get_max_HP()){
                     current->apply_effect(pokemon);
                     unsigned int i = k;
@@ -38,8 +38,22 @@ void Player::heal_pokemoni() {
                     k--;
                 }
             }
-            k++;
         }
+//        for (const auto& pot: potions) {
+//            if (auto current = std::dynamic_pointer_cast<Healing_Potion>(pot)) {
+//                if(pokemon.get_HP() != pokemon.get_max_HP()){
+//                    current->apply_effect(pokemon);
+//                    unsigned int i = k;
+//                    while(i < potions.size() - 1) {
+//                        potions[i] = potions[i + 1];
+//                        i++;
+//                    }
+//                    potions.resize(potions.size()-1);
+//                    k--;
+//                }
+//            }
+//            k++;
+//        }
     }
 }
 

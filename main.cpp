@@ -159,10 +159,7 @@ int main() {
     std::cout<<power_bulbasaur.get_dmg()<<'\n';
 
     Healing_Potion Potionheal1{"Lesser Healing Potion", 20 , 3, 30.f};
-    Potion *p = &Potionheal1;
-    std::cout << *p;
     pika.take_damage(40.f);
-    p->apply_effect(pika);
     std::cout << "\n"<< pika.get_HP() << "\n";
     std::cout << Potionheal1;
     for (int i = 0; i < 16; i++) {
