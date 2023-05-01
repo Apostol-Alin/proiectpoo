@@ -3,11 +3,19 @@
 //
 
 #include "Potion.h"
+#include "exceptii.h"
 void Potion::display(std::ostream &) const {}
 
 Potion::Potion(const Potion &other) = default;
+
 Potion& Potion::operator=(const Potion &other) = default;
-Potion::Potion(std::string  potion_name_, int potion_cost_, int turns_until_old_) : potion_name(std::move(potion_name_)), potion_cost(potion_cost_), turns_until_old(turns_until_old_) {}
+
+Potion::Potion(std::string  potion_name_, int potion_cost_, int turns_until_old_) :
+potion_name(std::move(potion_name_)), potion_cost(potion_cost_), turns_until_old(turns_until_old_) {
+    if(potion_cost_ <= 0)
+        throw potion_error("Potion cost needs to be greater that 0...\n");
+}
+
 std::ostream &operator<<(std::ostream &os, const Potion &potion_) {
     os << potion_.potion_name << "\n" << "Cost: " << potion_.potion_cost << "\n";
     os << "Turns until potions gets old: " << potion_.turns_until_old << "\n";

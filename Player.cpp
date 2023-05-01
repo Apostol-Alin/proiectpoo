@@ -4,6 +4,9 @@
 
 #include "Player.h"
 #include "Healing_Potion.h"
+
+const int Player::carrying_capacity = 7;
+
 int Player::bonus_score(const Pokemon& poke){
     int bonus = 0;
     std::string tmp = poke.get_card().get_rarity();
@@ -39,24 +42,14 @@ void Player::heal_pokemoni() {
                 }
             }
         }
-//        for (const auto& pot: potions) {
-//            if (auto current = std::dynamic_pointer_cast<Healing_Potion>(pot)) {
-//                if(pokemon.get_HP() != pokemon.get_max_HP()){
-//                    current->apply_effect(pokemon);
-//                    unsigned int i = k;
-//                    while(i < potions.size() - 1) {
-//                        potions[i] = potions[i + 1];
-//                        i++;
-//                    }
-//                    potions.resize(potions.size()-1);
-//                    k--;
-//                }
-//            }
-//            k++;
-//        }
     }
 }
-
+void Player::old_potions() {
+    for(auto& pot : potions){
+        pot->increase_turn_counter();
+        pot->turn_old();
+    }
+}
 //void Player::choose_potion(Pokemon &poke){
 //
 //}
