@@ -6,8 +6,12 @@
 
 #include <utility>
 #include <rlutil.h>
+#include "exceptii.h"
+
 [[nodiscard]] Power Pokemon::get_power(unsigned int i) const{
-    return attack.at(i-1);
+    if(i < 1 or i > attack.size())
+        throw invalid_option("Invalid index...\n");
+    return attack[i-1];
 }
 
 [[nodiscard]] Carte Pokemon::get_card() const{ return pokemon_card;}
@@ -45,21 +49,27 @@ void Pokemon::restore_energy(int value_){
 }
 
 [[maybe_unused]] Power Pokemon::choose_attack(){
-    std::cout<<"Current energy: "<<energy<<"\n";
-    std::cout<<"Please choose an attack:\n";
-    unsigned int i = 1;
-    for(const auto & a : attack){
-        std::cout<<i<<". "<<a.get_name()<<"\t"<<"Energy cost: "<<a.get_energy_cost()<<"\n";
-        i++;
-    }
-    std::cin >> i;
-    const Power temp = get_power(i);
-    if(temp.get_energy_cost() <= energy){
-        energy -= temp.get_energy_cost();
-        return temp;
-    }
-    else
-        throw std::logic_error("Not enough energy\n");
+    do {
+        try {
+            std::cout << "Current energy: " << energy << "\n";
+            std::cout << "Please choose an attack:\n";
+            unsigned int i = 1;
+            for (const auto &a: attack) {
+                std::cout << i << ". " << a.get_name() << "\t" << "Energy cost: " << a.get_energy_cost() << "\n";
+                i++;
+            }
+            std::cin >> i;
+            const Power temp = get_power(i);
+            if (temp.get_energy_cost() <= energy) {
+                energy -= temp.get_energy_cost();
+                return temp;
+            } else
+                throw std::logic_error("Not enough energy\n");
+        }
+        catch(invalid_option const &exc){
+            std::cout << exc.what() << "\n";
+        }
+    }while(true);
 }
 
 [[maybe_unused]] float Pokemon::choose_combo(){
@@ -75,6 +85,7 @@ void Pokemon::restore_energy(int value_){
         std::cout << "1. Add attack to combo\n";
         std::cout << "2. Remove attack from combo\n";
         std::cout << "3. Finish combo\n";
+        std::cout << "4. Exit combo menu\n";
         std::cin >> i;
         try {
             switch (i) {
@@ -103,6 +114,9 @@ void Pokemon::restore_energy(int value_){
                     else
                         std::cout<<"The combo is empty\n Please choose at least one attack!\n";
                     break;
+                }
+                case 4:{
+                    return 0.f;
                 }
                 default: {
                     std::cout << "Invalid option\n";
@@ -147,7 +161,13 @@ void Pokemon::reset_damage_dealt_modifier(){
 }
 
 Pokemon::Pokemon(std::string  name_, std::string  type_, std::vector <Power>& attack_, std::string  weakness_,std::string  resistance_, float max_HP_,const Carte& pokemon_card_, float damage_taken_modifier_, float damage_dealt_modifier_ , int total_energy_ ):
-        name(std::move(name_)),type(std::move(type_)), attack(attack_), weakness(std::move(weakness_)), resistance(std::move(resistance_)), HP(max_HP_), max_HP(max_HP_),damage_taken_modifier(damage_taken_modifier_), damage_dealt_modifier(damage_dealt_modifier_), energy(total_energy_), total_energy(total_energy_), pokemon_card(pokemon_card_){}
+        name(std::move(name_)),type(std::move(type_)), attack(attack_), weakness(std::move(weakness_)), resistance(std::move(resistance_)), HP(max_HP_),
+        max_HP(max_HP_),damage_taken_modifier(damage_taken_modifier_), damage_dealt_modifier(damage_dealt_modifier_), energy(total_energy_), total_energy(total_energy_), pokemon_card(pokemon_card_){
+        if(max_HP_ <= 0)
+            throw pokemon_error("Pokemon needs to have HP > 0 ...\n");
+        if(attack_.empty())
+            throw pokemon_error("Pokemon needs to have at least 1 attack..\n");
+}
 
 Pokemon::Pokemon(const Pokemon& other): name(other.name), type(other.type), attack(other.attack), weakness(other.weakness), resistance(other.resistance), HP(other.HP), max_HP(other.max_HP), damage_taken_modifier(other.damage_taken_modifier), damage_dealt_modifier(other.damage_dealt_modifier), energy(other.energy), total_energy(other.total_energy),
                                         pokemon_card(other.pokemon_card){}

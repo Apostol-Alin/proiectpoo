@@ -7,6 +7,7 @@
 #include "Power.h"
 #include "Carte.h"
 #include <vector>
+
 class Pokemon {
     std::string name;
     std::string type;

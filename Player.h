@@ -13,9 +13,10 @@ class Player {
     std::vector <std::shared_ptr<Potion>> potions;
     int money;
     int score;
-    static const int carrying_capacity = 7;
+    static const int carrying_capacity;
     static int bonus_score(const Pokemon& poke);
 public:
+    void old_potions();
     //void choose_potion(Pokemon& poke);
     void heal_pokemoni ();
     void add_potion(const std::shared_ptr<Potion>& new_pot);
