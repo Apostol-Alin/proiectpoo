@@ -54,6 +54,7 @@ int main() {
         pika.check_weakness_resistance(power_bulbasaur);
 //    //*********************
 ////    rulati pentru a creea un combo de attackuri pentru pikachu
+        std::cout << pika.choose_attack();
         std::cout << pika.choose_combo();
         std::cout << ": Damage dealt from combo\n";
         pika.restore_energy();
