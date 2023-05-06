@@ -15,7 +15,7 @@
 #include "Curse_Potion.h"
 #include "map.h"
 #include "exceptii.h"
-
+#include "Defence_Potion.h"
 int main() {
 
     Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f,35);
@@ -98,6 +98,8 @@ int main() {
         Hazard_Potion haz{"Plague",25,4,20};
         std::cout << haz;
         Curse_Potion curse{"Mistery Potion", 10, 6, 70, 15};
+        Defence_Potion def{"Shield's up!", 30, 2, 1.2f};
+        std::cout << def;
         m1.start_game();
         std::cout << curse;
         std::cout << pika.get_HP() << "\n";
@@ -107,12 +109,14 @@ int main() {
         p1.add_potion(energ.clone());
         p1.add_potion(haz.clone());
         p1.add_potion(curse.clone());
+        p1.add_potion(def.clone());
+        def.apply_effect(pika);
         std::cout << p1;
         p1.heal_pokemoni();
         std::cout << p1;
-        p1.old_potions();
+        p1.increase_age_to_potions();
     }
-    catch(const game_error& err){
+    catch(game_error& err){
         std::cout << err.what();
     }
     return 0;

@@ -16,7 +16,7 @@ class Player {
     static const int carrying_capacity;
     static int bonus_score(const Pokemon& poke);
 public:
-    void old_potions();
+    void increase_age_to_potions();
     //void choose_potion(Pokemon& poke);
     void heal_pokemoni ();
     void add_potion(const std::shared_ptr<Potion>& new_pot);

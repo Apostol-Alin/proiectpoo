@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 class Power{
+
     std::string name;
     std::string description;
     std::string power_type;

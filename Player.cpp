@@ -44,7 +44,7 @@ void Player::heal_pokemoni() {
         }
     }
 }
-void Player::old_potions() {
+void Player::increase_age_to_potions() {
     for(auto& pot : potions){
         pot->increase_turn_counter();
         pot->turn_old();

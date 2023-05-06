@@ -18,13 +18,13 @@ protected:
     Potion(const Potion &other);
     Potion &operator=(const Potion &other);
     explicit Potion(std::string  potion_name_, int potion_cost_, int truns_until_old_);
+    [[nodiscard]] bool old_enough() const;
 public:
     friend std::ostream &operator<<(std::ostream &os, const Potion &potion_);
     [[nodiscard]] virtual std::shared_ptr<Potion> clone() const = 0;
     virtual void apply_effect(Pokemon& poke) const = 0;
     virtual void turn_old() = 0;
     virtual void increase_turn_counter();
-    [[nodiscard]] virtual bool old_enough() const;
     virtual ~Potion();
 };
 

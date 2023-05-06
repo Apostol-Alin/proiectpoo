@@ -66,7 +66,7 @@ void Pokemon::restore_energy(int value_){
             } else
                 throw std::logic_error("Not enough energy\n");
         }
-        catch(invalid_option const &exc){
+        catch(invalid_option &exc){
             std::cout << exc.what() << "\n";
         }
     }while(true);
@@ -124,10 +124,10 @@ void Pokemon::restore_energy(int value_){
                 }
             }
         }
-        catch(std::out_of_range const &exc){
+        catch(std::out_of_range &exc){
             std::cout<<exc.what();
         }
-        catch(std::logic_error const &exc){
+        catch(std::logic_error &exc){
             std::cout<<exc.what();
         }
 //            2nd step -> ask user for action : add attack to combo, remove attack from combo, finish combo
