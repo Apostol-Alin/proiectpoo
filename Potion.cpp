@@ -24,8 +24,16 @@ std::ostream &operator<<(std::ostream &os, const Potion &potion_) {
     os << "\n";
     return os;
 }
-void Potion::turn_old() {}
+int Potion::get_cost() const {return potion_cost;}
+
+std::string Potion::get_name() {return potion_name;}
+
+int Potion::get_turns_until_old() const { return turns_until_old;}
+
+//void Potion::turn_old() {}
+
 void Potion::increase_turn_counter() { current_turns++;}
+
 //void Potion::apply_effect(Pokemon& ) const {};
 bool Potion::old_enough() const {return current_turns == turns_until_old;}
 Potion::~Potion() = default;

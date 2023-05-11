@@ -18,8 +18,11 @@ class Player {
 public:
     void increase_age_to_potions();
     //void choose_potion(Pokemon& poke);
-    void heal_pokemoni ();
+    void heal_pokemoni();
     void add_potion(const std::shared_ptr<Potion>& new_pot);
+    void add_pokemon(Pokemon poke);
+    void display_pokemoni() const;
+    void display_potions() const;
     [[nodiscard]] int get_money() const;
     void update_money(int value);
     [[nodiscard]] int get_score() const;

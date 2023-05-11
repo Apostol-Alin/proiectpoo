@@ -24,6 +24,9 @@ public:
     [[nodiscard]] virtual std::shared_ptr<Potion> clone() const = 0;
     virtual void apply_effect(Pokemon& poke) const = 0;
     virtual void turn_old() = 0;
+    [[nodiscard]] int get_cost() const;
+    std::string get_name();
+    [[nodiscard]] int get_turns_until_old() const;
     virtual void increase_turn_counter();
     virtual ~Potion();
 };

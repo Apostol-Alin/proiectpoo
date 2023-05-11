@@ -16,6 +16,7 @@
 #include "map.h"
 #include "exceptii.h"
 #include "Defence_Potion.h"
+
 int main() {
 
     Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f,35);
@@ -83,7 +84,6 @@ int main() {
         Potionheal1.increase_turn_counter();
         Potionheal1.turn_old();
         Player p1{a,v_poke,potions};
-        map m1{p1,1,1,v_poke};
         Player p2{p1};
         p2.add_potion(Potionheal1.clone());
         p1.update_money(10);
@@ -100,21 +100,23 @@ int main() {
         Curse_Potion curse{"Mistery Potion", 10, 6, 70, 15};
         Defence_Potion def{"Shield's up!", 30, 2, 1.2f};
         std::cout << def;
+        std::vector<std::shared_ptr<Potion>> map_potions;
+        map_potions.emplace_back(Potionheal1.clone());
+        map_potions.emplace_back(energ.clone());
+        map_potions.emplace_back(haz.clone());
+        map_potions.emplace_back(curse.clone());
+        map_potions.emplace_back(def.clone());
+        std::vector<Pokemon> vect_pokemoni;
+        std::vector<std::shared_ptr<Potion>> vect_potiuni;
+        Player p3{a,vect_pokemoni,vect_potiuni};
+        map m1{p3,1,1,v_poke, map_potions};
         m1.start_game();
         std::cout << curse;
         std::cout << pika.get_HP() << "\n";
         curse.apply_effect(pika);
         std::cout << pika.get_HP();
-        p1.add_potion(Potionheal1.clone());
-        p1.add_potion(energ.clone());
-        p1.add_potion(haz.clone());
-        p1.add_potion(curse.clone());
-        p1.add_potion(def.clone());
         def.apply_effect(pika);
-        std::cout << p1;
-        p1.heal_pokemoni();
-        std::cout << p1;
-        p1.increase_age_to_potions();
+        map m2(m1);
     }
     catch(game_error& err){
         std::cout << err.what();

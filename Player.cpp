@@ -7,6 +7,26 @@
 
 const int Player::carrying_capacity = 7;
 
+void Player::add_pokemon(Pokemon poke){
+    pokemoni.emplace_back(poke);
+}
+
+void Player::display_pokemoni() const {
+    unsigned int i = 1;
+    for(const auto& poke: pokemoni){
+        std::cout << i << "." << poke.get_name() << " HP: " << poke.get_HP() << "\n";
+        i++;
+    }
+}
+
+void Player::display_potions() const {
+    unsigned int i = 1;
+    for(const auto& pot: potions){
+        std::cout << i << "." << pot->get_name() << " | Max age: " << pot->get_turns_until_old() << "\n";
+        i++;
+    }
+}
+
 int Player::bonus_score(const Pokemon& poke){
     int bonus = 0;
     std::string tmp = poke.get_card().get_rarity();
