@@ -109,6 +109,8 @@ int main() {
         std::vector<Pokemon> vect_pokemoni;
         std::vector<std::shared_ptr<Potion>> vect_potiuni;
         Player p3{a,vect_pokemoni,vect_potiuni};
+        p3.add_pokemon(pika);
+        p3.heal_pokemoni();
         map m1{p3,1,1,v_poke, map_potions};
         m1.start_game();
         std::cout << curse;
