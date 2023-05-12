@@ -4,8 +4,36 @@
 
 #include "Player.h"
 #include "Healing_Potion.h"
-
+#include "Hazard_Potion.h"
+#include "exceptii.h"
 const int Player::carrying_capacity = 7;
+
+unsigned int Player::get_inventory_size() {return potions.size();}
+
+void Player::choose_potion(Pokemon& pokemon_player, Pokemon& pokemon_enemy) {
+    display_potions();
+    unsigned int i;
+    while(true){
+        std::cin >> i;
+        if(i >= 1 and i <= potions.size()){
+            if(auto current = std::dynamic_pointer_cast<Hazard_Potion>(potions[i-1])){
+                current->apply_effect(pokemon_enemy);
+            }
+            else{
+                potions[i-1]->apply_effect(pokemon_player);
+            }
+            unsigned int k = i - 1;
+            while(k < potions.size() - 1) {
+                potions[k] = potions[k + 1];
+                k++;
+            }
+            potions.resize(potions.size()-1);
+            break;
+        }
+        else
+            std::cout << "Invalid option\n";
+    }
+}
 
 void Player::add_pokemon(Pokemon poke){
     pokemoni.emplace_back(poke);
@@ -18,6 +46,12 @@ void Player::display_pokemoni() const {
         i++;
     }
 }
+
+Pokemon& Player::choose_pokemon(unsigned int i) {
+    return pokemoni[i-1];
+}
+
+unsigned int Player::get_pokemoni_size() {return pokemoni.size();}
 
 void Player::display_potions() const {
     unsigned int i = 1;
@@ -43,6 +77,8 @@ int Player::bonus_score(const Pokemon& poke){
 void Player::add_potion(const std::shared_ptr<Potion>& new_pot){
     if(potions.size() < carrying_capacity)
         potions.emplace_back(new_pot);
+    else
+        throw overflow_capacity("You don't have enough space\n");
 }
 
 void Player::heal_pokemoni() {

@@ -19,9 +19,7 @@ class map {
     static void entry_message();
     void gen();
     void access_shop();
-//    void pokemon_encounter(){
-//
-//    }d
+    bool pokemon_encounter();
 public:
     void start_game();
     map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);

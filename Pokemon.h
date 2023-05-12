@@ -23,7 +23,7 @@ class Pokemon {
     Carte pokemon_card;
     [[nodiscard]] Power get_power(unsigned int i) const;
 public:
-
+    bool can_attack();
     [[nodiscard]] float get_HP() const;
     [[nodiscard]] float get_max_HP() const;
     [[nodiscard]] bool is_alive() const;

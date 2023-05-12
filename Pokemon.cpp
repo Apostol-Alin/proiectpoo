@@ -13,7 +13,6 @@
         throw invalid_option("Invalid index...\n");
     return attack[i-1];
 }
-
 [[nodiscard]] Carte Pokemon::get_card() const{ return pokemon_card;}
 
 [[nodiscard]] float Pokemon::get_HP() const{ return HP;}
@@ -27,7 +26,12 @@
 std::string Pokemon::get_name() const{
     return name;
 }
-
+bool Pokemon::can_attack() {
+    for(const auto& pow: attack)
+        if(pow.get_energy_cost() <= energy)
+            return true;
+    return false;
+}
 void Pokemon::check_weakness_resistance(const Power& p){
     if(this->weakness == p.get_power_type())
         update_damage_taken_modifier(0.9f);

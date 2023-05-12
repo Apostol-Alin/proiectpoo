@@ -22,6 +22,7 @@ int main() {
     Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f,35);
     Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36.f,25);
     Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35.f,30);
+
     std::vector <Power> puteri_pikachu;
     puteri_pikachu.emplace_back(power_pikachu);
     std::vector <Power> puteri_bulb;
@@ -119,6 +120,8 @@ int main() {
         std::cout << pika.get_HP();
         def.apply_effect(pika);
         map m2(m1);
+        std::cout << "\n";
+        p1.add_potion(haz.clone());
     }
     catch(game_error& err){
         std::cout << err.what();

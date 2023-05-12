@@ -21,5 +21,8 @@ class pokemon_error : public game_error{
 class invalid_option : public std::out_of_range{
     using std::out_of_range::out_of_range;
 };
+class overflow_capacity: public game_error{
+    using game_error::game_error;
+};
 
 #endif //OOP_EXCEPTII_H
