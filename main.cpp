@@ -110,9 +110,14 @@ int main() {
         std::vector<Pokemon> vect_pokemoni;
         std::vector<std::shared_ptr<Potion>> vect_potiuni;
         Player p3{a,vect_pokemoni,vect_potiuni};
+        pika.heal(100.f);
         p3.add_pokemon(pika);
         p3.heal_pokemoni();
-        map m1{p3,1,1,v_poke, map_potions};
+        std::vector<Pokemon> pokemon_pool;
+        pokemon_pool.emplace_back(pika);
+        pokemon_pool.emplace_back(bulb);
+        pokemon_pool.emplace_back(charm);
+        map m1{p3,1,1,pokemon_pool, map_potions};
         m1.start_game();
         std::cout << curse;
         std::cout << pika.get_HP() << "\n";
