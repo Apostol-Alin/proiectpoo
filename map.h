@@ -20,6 +20,8 @@ class map {
     void gen();
     void access_shop();
     bool pokemon_encounter();
+    void player_turn(Pokemon&, Pokemon&);
+    static void enemy_turn(Pokemon&, Pokemon&);
 public:
     void start_game();
     map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);

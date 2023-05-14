@@ -60,21 +60,10 @@ int main() {
         std::cout << ": Damage dealt from combo\n";
         pika.restore_energy();
         std::cout<<power_bulbasaur.get_dmg()<<'\n';
-
         Healing_Potion Potionheal1{"Lesser Healing Potion", 20 , 3, 30.f};
         pika.take_damage(40.f);
         std::cout << "\n"<< pika.get_HP() << "\n";
         std::cout << Potionheal1;
-        for (int i = 0; i < 16; i++) {
-            rlutil::setColor(i);
-            std::cout << i << " ";
-        }
-        for (int i = 0; i < 8; i++) {
-            rlutil::setBackgroundColor(i);
-            std::cout << i;
-            rlutil::setBackgroundColor(0);
-            std::cout << ' ';
-        }
         std::cout << "\n";
         std::vector<Pokemon> v_poke;
         v_poke.emplace_back(pika);

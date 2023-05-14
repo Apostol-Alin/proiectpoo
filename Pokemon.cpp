@@ -21,7 +21,7 @@
 
 [[nodiscard]] bool Pokemon::is_alive() const{ return HP > 0.f;}
 
-[[nodiscard]] int Pokemon::get_energy() const{ return total_energy;}
+[[nodiscard]] int Pokemon::get_energy() const{ return energy;}
 
 std::string Pokemon::get_name() const{
     return name;
@@ -68,7 +68,7 @@ void Pokemon::restore_energy(int value_){
                 energy -= temp.get_energy_cost();
                 return temp;
             } else
-                throw std::logic_error("Not enough energy\n");
+                std::cout << "Not enough energy\n";
         }
         catch(invalid_option &exc){
             std::cout << exc.what() << "\n";
@@ -94,9 +94,12 @@ void Pokemon::restore_energy(int value_){
         try {
             switch (i) {
                 case 1: {
-                    chosen_power = choose_attack();
-                    total_damage += chosen_power.get_dmg();
-                    combos.emplace_back(chosen_power);
+                    if(this->can_attack()) {
+                        chosen_power = choose_attack();
+                        total_damage += chosen_power.get_dmg();
+                        combos.emplace_back(chosen_power);
+                    }
+                    else std::cout << "Not enough energy\n";
                     break;
                 }
                 case 2: {

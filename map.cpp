@@ -97,6 +97,93 @@ void map::access_shop(){
         else {std::cout << "Invalid option!\n";}
     }
 }
+void map::player_turn(Pokemon& player_pokemon, Pokemon& enemy_pokemon){
+    unsigned int input;
+    std::cout << "It's the Player's turn!\n";
+    std::cout << "Press 0 if you wish to skip turn\n";
+    std::cout << "Press 1 to choose an attack\n";
+    std::cout << "Press 2 to choose a combo\n";
+    std::cout << "Press 3 to choose a potion to apply\n\n";
+    while(true){
+        std::cout << "Player's pokemon:" << player_pokemon.get_name();
+        rlutil::setColor(12);
+        std::cout << " | HP: " << player_pokemon.get_HP();
+        rlutil::setColor(14);
+        std::cout << " | Energy: " << player_pokemon.get_energy() << "\n";
+        rlutil::setColor(15);
+        std::cout << "Enemy's pokemon:" << enemy_pokemon.get_name();
+        rlutil::setColor(12);
+        std::cout << " | HP: " << enemy_pokemon.get_HP();
+        rlutil::setColor(14);
+        std::cout << " | Energy: " << enemy_pokemon.get_energy() << "\n";
+        rlutil::setColor(15);
+        std::cin >> input;
+        if(input == 0)
+            break;
+        else if(input == 1){
+            if(player_pokemon.can_attack()){
+                enemy_pokemon.take_damage(player_pokemon.choose_attack().get_dmg());
+                break;
+            }
+            else std::cout << "You don't have enough energy to perform an attack\n";
+        }
+        else if(input == 2){
+            if(player_pokemon.can_attack()){
+                enemy_pokemon.take_damage(player_pokemon.choose_combo());
+                break;
+            }
+            else std::cout << "You don't have enough energy to perform a combo\n";
+        }
+        else if(input == 3){
+            if(player.get_inventory_size()) {
+                player.choose_potion(player_pokemon, enemy_pokemon);
+            }
+            else
+                std::cout << "Your inventory is empty\n";
+        }
+        else std::cout << "Not a valid option... Please choose an action\n";
+    }
+    player_pokemon.restore_energy();
+}
+void map::enemy_turn(Pokemon &player_pokemon, Pokemon &enemy_pokemon) {
+    unsigned int input;
+    std::cout << "It's the enemy's turn!\n";
+    std::cout << "Press 0 to skip turn\n";
+    std::cout << "Press 1 to choose an attack\n";
+    std::cout << "Press 2 to choose a combo\n\n";
+    while(true){
+        std::cout << "Player's pokemon:" << player_pokemon.get_name();
+        rlutil::setColor(12);
+        std::cout << " | HP: " << player_pokemon.get_HP();
+        rlutil::setColor(14);
+        std::cout << " | Energy: " << player_pokemon.get_energy() << "\n";
+        rlutil::setColor(15);
+        std::cout << "Enemy's pokemon:" << enemy_pokemon.get_name();
+        rlutil::setColor(12);
+        std::cout << " | HP: " << enemy_pokemon.get_HP();
+        rlutil::setColor(14);
+        std::cout << " | Energy: " << enemy_pokemon.get_energy() << "\n";
+        rlutil::setColor(15);
+        std::cin >> input;
+        if(input == 0) break;
+        else if (input == 1){
+            if(enemy_pokemon.can_attack()){
+                player_pokemon.take_damage(enemy_pokemon.choose_attack().get_dmg());
+                break;
+            }
+            else std::cout << "You don't have enough energy to attack\n";
+        }
+        else if (input == 2){
+            if(enemy_pokemon.can_attack()){
+                player_pokemon.take_damage(enemy_pokemon.choose_combo());
+                break;
+            }
+            else std::cout << "You don't have enough energy to perform a combo\n";
+        }
+        else std::cout << "Not a valid option... Please choose an action\n";
+    }
+    enemy_pokemon.restore_energy();
+}
 bool map::pokemon_encounter() {
     unsigned int j = rand() % pokemoni.size();
     Pokemon enemy_pokemon = pokemoni[j], player_pokemon(enemy_pokemon);
@@ -117,96 +204,15 @@ bool map::pokemon_encounter() {
             std::cout << "Invalid option\n";
     }
     unsigned int turn = 0;
-    unsigned int input;
     while(player_pokemon.is_alive() and enemy_pokemon.is_alive()){
         if(turn % 2 == 0){
-            std::cout << "It's the Player's turn!\n";
-            std::cout << "Press 0 if you wish to skip turn\n";
-            std::cout << "Press 1 to choose an attack\n";
-            std::cout << "Press 2 to choose a combo\n";
-            std::cout << "Press 3 to choose a potion to apply\n\n";
-            while(true){
-                std::cout << "Player's pokemon:" << player_pokemon.get_name();
-                rlutil::setColor(12);
-                std::cout << " | HP: " << player_pokemon.get_HP();
-                rlutil::setColor(14);
-                std::cout << " | Energy: " << player_pokemon.get_energy() << "\n";
-                rlutil::setColor(15);
-                std::cout << "Enemy's pokemon:" << enemy_pokemon.get_name();
-                rlutil::setColor(12);
-                std::cout << " | HP: " << enemy_pokemon.get_HP();
-                rlutil::setColor(14);
-                std::cout << " | Energy: " << enemy_pokemon.get_energy() << "\n";
-                rlutil::setColor(15);
-                std::cin >> input;
-                if(input == 0)
-                    break;
-                else if(input == 1){
-                    if(player_pokemon.can_attack()){
-                        enemy_pokemon.take_damage(player_pokemon.choose_attack().get_dmg());
-                        break;
-                    }
-                    else std::cout << "You don't have enough energy to perform an attack\n";
-                }
-                else if(input == 2){
-                    if(player_pokemon.can_attack()){
-                        enemy_pokemon.take_damage(player_pokemon.choose_combo());
-                        break;
-                    }
-                    else std::cout << "You don't have enough energy to perform a combo\n";
-                }
-                else if(input == 3){
-                    if(player.get_inventory_size()) {
-                        player.choose_potion(player_pokemon, enemy_pokemon);
-                    }
-                    else
-                        std::cout << "Your inventory is empty\n";
-                }
-                else std::cout << "Not a valid option... Please choose an action\n";
-            }
+            player_turn(player_pokemon,enemy_pokemon);
         }
         else{
-            std::cout << "It's the enemy's turn!\n";
-            std::cout << "Press 0 to skip turn\n";
-            std::cout << "Press 1 to choose an attack\n";
-            std::cout << "Press 2 to choose a combo\n\n";
-            while(true){
-                std::cout << "Player's pokemon:" << player_pokemon.get_name();
-                rlutil::setColor(12);
-                std::cout << " | HP: " << player_pokemon.get_HP();
-                rlutil::setColor(14);
-                std::cout << " | Energy: " << player_pokemon.get_energy() << "\n";
-                rlutil::setColor(15);
-                std::cout << "Enemy's pokemon:" << enemy_pokemon.get_name();
-                rlutil::setColor(12);
-                std::cout << " | HP: " << enemy_pokemon.get_HP();
-                rlutil::setColor(14);
-                std::cout << " | Energy: " << enemy_pokemon.get_energy() << "\n";
-                rlutil::setColor(15);
-                std::cin >> input;
-                if(input == 0) break;
-                else if (input == 1){
-                    if(enemy_pokemon.can_attack()){
-                        player_pokemon.take_damage(enemy_pokemon.choose_attack().get_dmg());
-                        break;
-                    }
-                    else std::cout << "You don't have enough energy to attack\n";
-                }
-                else if (input == 2){
-                    if(enemy_pokemon.can_attack()){
-                        player_pokemon.take_damage(enemy_pokemon.choose_combo());
-                        break;
-                    }
-                    else std::cout << "You don't have enough energy to perform a combo\n";
-                }
-                else std::cout << "Not a valid option... Please choose an action\n";
-            }
-            enemy_pokemon.restore_energy();
+            enemy_turn(player_pokemon, enemy_pokemon);
         }
         turn++;
     }
-    std::cout << enemy_pokemon;
-    std::cout << player_pokemon;
     if(enemy_pokemon.is_alive())
         return true;
     else{
