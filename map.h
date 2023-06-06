@@ -6,8 +6,8 @@
 #define OOP_MAP_H
 #include "Player.h"
 #include "Pokemon.h"
-
-class map {
+#include "singleton.h"
+class map : public singleton<map>{
     static const int map_size = 10;
     std::vector<std::vector<std::string>> layout;
     std::vector<Pokemon> pokemoni;
@@ -22,14 +22,10 @@ class map {
     bool pokemon_encounter();
     void player_turn(Pokemon&, Pokemon&);
     static void enemy_turn(Pokemon&, Pokemon&);
-    map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);
 public:
-    static map& get_map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);
+    map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);
     void start_game();
-    map(const map& other) = delete;
-    map& operator=(map other) = delete;
     friend std::ostream& operator<<(std::ostream& os, const map& map);
-    ~map();
 };
 
 

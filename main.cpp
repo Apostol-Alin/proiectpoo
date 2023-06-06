@@ -20,6 +20,7 @@ int main() {
     try {
         Power slap{"Slap","just a slap","Physical",5.f,5};
         std::cout << slap.get_power_type();
+        auto &factory = pokemon_factory::get_instance();
         Pokemon pika = pokemon_factory::Pikachu();
         Pokemon bulb = pokemon_factory::Bulbasaur();
         Pokemon charm = pokemon_factory::Charmander();
@@ -66,7 +67,7 @@ int main() {
         pokemon_pool.emplace_back(pika);
         pokemon_pool.emplace_back(bulb);
         pokemon_pool.emplace_back(charm);
-        auto &m1 = map::get_map(p3,1,1,pokemon_pool, map_potions);
+        auto &m1 = map::get_instance(p3,1,1,pokemon_pool, map_potions);
         m1.start_game();
     }
     catch(game_error& err){

@@ -302,10 +302,3 @@ std::ostream& operator<<(std::ostream& os, const map& other){
     }
     return os;
 }
-
-map& map::get_map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_){
-    static map harta{player_,x,y,std::move(pokemoni_),std::move(potions_)};
-    return harta;
-}
-
-map::~map() = default;
