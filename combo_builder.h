@@ -15,7 +15,6 @@ public:
     combo_builder& addAttack();
     combo_builder& removeAttack();
     float finish_combo();
-    [[nodiscard]] std::vector<Power> get_combos() const;
 };
 
 

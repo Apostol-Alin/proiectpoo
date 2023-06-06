@@ -40,7 +40,3 @@ float combo_builder::finish_combo(){
         return 0.f;
     }
 }
-
-std::vector<Power> combo_builder::get_combos() const{
-    return combos;
-}
