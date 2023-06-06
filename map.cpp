@@ -5,6 +5,7 @@
 #include "map.h"
 #include "exceptii.h"
 #include <random>
+#include <utility>
 void map::draw(){
     rlutil::cls();
     //rlutil::locate(1, map_size + 1);
@@ -303,7 +304,7 @@ std::ostream& operator<<(std::ostream& os, const map& other){
 }
 
 map& map::get_map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_){
-    static map harta{player_,x,y,pokemoni_,potions_};
+    static map harta{player_,x,y,std::move(pokemoni_),std::move(potions_)};
     return harta;
 }
 

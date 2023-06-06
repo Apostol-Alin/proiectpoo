@@ -2,10 +2,8 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <rlutil.h>
 #include "Power.h"
 #include "Pokemon.h"
-#include "Carte.h"
 #include "Player.h"
 #include "Potion.h"
 #include "Healing_Potion.h"
@@ -19,8 +17,9 @@
 #include "pokemon_factory.h"
 
 int main() {
-
     try {
+        Power slap{"Slap","just a slap","Physical",5.f,5};
+        std::cout << slap.get_power_type();
         Pokemon pika = pokemon_factory::Pikachu();
         Pokemon bulb = pokemon_factory::Bulbasaur();
         Pokemon charm = pokemon_factory::Charmander();

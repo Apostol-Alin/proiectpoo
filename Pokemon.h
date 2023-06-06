@@ -36,6 +36,7 @@ public:
     [[maybe_unused]] Power choose_attack();
     [[maybe_unused]] float choose_combo();
     void heal(float healing_value);
+    void reduce_energy(int);
     void update_damage_taken_modifier(float modifier);
     void update_damage_dealt_modifier(float modifier);
     void reset_damage_taken_modifier();

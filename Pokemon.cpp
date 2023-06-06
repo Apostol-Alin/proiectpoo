@@ -7,6 +7,7 @@
 #include <utility>
 #include <rlutil.h>
 #include "exceptii.h"
+#include "combo_builder.h"
 
 [[nodiscard]] Power Pokemon::get_power(unsigned int i) const{
     if(i < 1 or i > attack.size())
@@ -77,14 +78,10 @@ void Pokemon::restore_energy(int value_){
     }while(true);
 }
 
-[[maybe_unused]] float Pokemon::choose_combo(){
-    std::vector <Power> combos;
-    Power chosen_power;
-    float total_damage = 0.f;
+float Pokemon::choose_combo() {
     unsigned int i;
-    do{
-//          combo_attack:
-//          1st step -> choose an atack and create the vector of attacks
+    combo_builder builder(*this);
+    do {
         std::cout << "Current energy:" << energy << "\n";
         std::cout << "Choose an action:\n";
         std::cout << "1. Add attack to combo\n";
@@ -92,59 +89,34 @@ void Pokemon::restore_energy(int value_){
         std::cout << "3. Finish combo\n";
         std::cout << "4. Exit combo menu\n";
         std::cin >> i;
+
         try {
             switch (i) {
-                case 1: {
-                    if(this->can_attack()) {
-                        chosen_power = choose_attack();
-                        total_damage += chosen_power.get_dmg();
-                        combos.emplace_back(chosen_power);
-                    }
-                    else std::cout << "Not enough energy\n";
+                case 1:
+                    builder.addAttack();
                     break;
-                }
-                case 2: {
-                    unsigned int k = 0;
-                    std::cout<<"Choose an attack to remove from your combo:\n";
-                    for(const auto & a : combos){
-                        std::cout<<k+1<<"."<<a.get_name()<<"\n";
-                        k++;
-                    }
-                    std::cin >> k;
-                    energy += combos.at(k-1).get_energy_cost();
-                    total_damage -= combos.at(k-1).get_dmg();
-                    combos.erase(combos.begin()+k-1);
+                case 2:
+                    builder.removeAttack();
                     break;
-                }
-                case 3: {
-                    if(!combos.empty())
-                        return total_damage;
-                    else
-                        std::cout<<"The combo is empty\n Please choose at least one attack!\n";
-                    break;
-                }
-                case 4:{
+                case 3:
+                    return builder.finish_combo();
+                case 4:
                     return 0.f;
-                }
-                default: {
+                default:
                     std::cout << "Invalid option\n";
                     break;
-                }
             }
         }
-        catch(std::out_of_range &exc){
-            std::cout<<exc.what();
+        catch (std::out_of_range& exc) {
+            std::cout << exc.what();
         }
-        catch(std::logic_error &exc){
-            std::cout<<exc.what();
+        catch (std::logic_error& exc) {
+            std::cout << exc.what();
         }
-//            2nd step -> ask user for action : add attack to combo, remove attack from combo, finish combo
-//            3rd step  -> if add attack -> call choose_attack -> go to step 2
-//                    -> if remove attack -> display vector of attacks chosen so far -> get index for removal -> go to step 2
-//                    -> else return the vector
-//            catch error -> repeat from step 2
-    }while(true);
+    } while (true);
 }
+
+void Pokemon::reduce_energy(int ammount){ energy -= ammount; }
 
 void Pokemon::heal(float healing_value){
     HP += healing_value;
