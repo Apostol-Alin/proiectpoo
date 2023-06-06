@@ -30,7 +30,7 @@ public:
     [[nodiscard]] int get_energy() const;
     [[nodiscard]] Carte get_card() const;
     [[nodiscard]]std::string get_name() const;
-    void check_weakness_resistance(const Power& p);
+    [[maybe_unused]] void check_weakness_resistance(const Power& p);
     void take_damage(float damage_);
     void restore_energy(int value = 20);
     [[maybe_unused]] Power choose_attack();
