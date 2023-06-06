@@ -277,23 +277,6 @@ void map::start_game(){
 map::map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_) :
 pokemoni(std::move(pokemoni_)), potions(std::move(potions_)), player(player_), x_player(x), y_player(y){}
 
-map::map(const map& other): pokemoni(other.pokemoni), player(other.player), x_player(other.x_player), y_player(other.y_player){
-    for(const auto& pot: other.potions)
-        this->potions.emplace_back(pot->clone());
-}
-
-map& map::operator=(map other){
-    swap(*this, other);
-    return *this;
-}
-
-void swap(map&map1, map& map2){
-    std::swap(map1.pokemoni, map2.pokemoni);
-    std::swap(map1.potions, map2.potions);
-    swap(map1.player, map2.player);
-    std::swap(map1.x_player, map2.x_player);
-    std::swap(map1.y_player, map2.y_player);
-}
 std::ostream& operator<<(std::ostream& os, const map& other){
     os << other.player;
     os << "X_player: " << other.x_player << " Y_player: " << other.y_player << "\n";
@@ -306,4 +289,10 @@ std::ostream& operator<<(std::ostream& os, const map& other){
     }
     return os;
 }
+
+map& map::get_map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_){
+    static map harta{player_,x,y,pokemoni_,potions_};
+    return harta;
+}
+
 map::~map() = default;

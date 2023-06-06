@@ -22,12 +22,12 @@ class map {
     bool pokemon_encounter();
     void player_turn(Pokemon&, Pokemon&);
     static void enemy_turn(Pokemon&, Pokemon&);
-public:
-    void start_game();
     map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);
-    map(const map& other);
-    map& operator=(map other);
-    friend void swap(map&, map&);
+public:
+    static map& get_map(const Player& player_, int x, int y, std::vector<Pokemon> pokemoni_, std::vector<std::shared_ptr<Potion>> potions_);
+    void start_game();
+    map(const map& other) = delete;
+    map& operator=(map other) = delete;
     friend std::ostream& operator<<(std::ostream& os, const map& map);
     ~map();
 };

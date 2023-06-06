@@ -16,55 +16,15 @@
 #include "map.h"
 #include "exceptii.h"
 #include "Defence_Potion.h"
+#include "pokemon_factory.h"
 
 int main() {
 
-    Power power_bulbasaur("Seed Rain","Unleash a rain of seeds that deals magic damage to foes","Earth",30.f,35);
-    Power power_pikachu("Tunder Bolt","Zap the enemy to deal damage","Lightning",36.f,25);
-    Power power_charmander("Flame Thrower","BUUUUUURN!!!!!","Fire",35.f,30);
-
-    std::vector <Power> puteri_pikachu;
-    puteri_pikachu.emplace_back(power_pikachu);
-    std::vector <Power> puteri_bulb;
-    puteri_bulb.emplace_back(power_bulbasaur);
-    std::vector <Power> puteri_charm;
-    puteri_charm.emplace_back(power_charmander);
-    Carte c1,c2,c3;
     try {
-        Pokemon pika("Pikachu", "Lightning", puteri_pikachu, "Earth", "-", 50.f, c1, 1.f, 1.f, 100);
-        Pokemon bulb("Bulbasaur", "Earth", puteri_bulb, "Fire", "-", 60.f, c2, 1.f, 1.f, 100);
-        Pokemon charm("Charmander", "Fire", puteri_charm, "Water", "-", 50.f, c3, 1.f, 1.f, 100);
-        std::cout<<power_bulbasaur<<"\n";
-        std::cout<<charm<<"\n";
-        std::cout<<pika.get_card()<<"\n";
-        std::cout<<bulb<<"\n";
-        power_bulbasaur = power_charmander;
-        std::cout<<power_bulbasaur<<"\n";
-        std::cout<<bulb<<"\n";
-        std::cout << "\n";
-        std::cout << "HP Pikachu inainte de a lua damage: " << pika.get_HP() << "\n";
-        pika.take_damage(20.f);
-        std::cout << "HP Pikachu dupa ce a luat damage: "<< pika.get_HP() << "\n";
-        pika.heal(30.f);
-        std::cout << "HP Pikachu dupa heal: "<< pika.get_HP() << "\n";
-        std::cout << "Is Pikachu still alive after that?:  " << pika.is_alive() << "\n";
-        std::cout << pika.get_energy() << '\n';
-        bulb.update_damage_dealt_modifier(2.f);
-        bulb.update_damage_taken_modifier(1.5f);
-        bulb.reset_damage_dealt_modifier();
-        bulb.reset_damage_taken_modifier();
-        pika.check_weakness_resistance(power_bulbasaur);
-//    //*********************
-////    rulati pentru a creea un combo de attackuri pentru pikachu
-        std::cout << pika.choose_combo();
-        std::cout << ": Damage dealt from combo\n";
-        pika.restore_energy();
-        std::cout<<power_bulbasaur.get_dmg()<<'\n';
+        Pokemon pika = pokemon_factory::Pikachu();
+        Pokemon bulb = pokemon_factory::Bulbasaur();
+        Pokemon charm = pokemon_factory::Charmander();
         Healing_Potion Potionheal1{"Lesser Healing Potion", 20 , 3, 30.f};
-        pika.take_damage(40.f);
-        std::cout << "\n"<< pika.get_HP() << "\n";
-        std::cout << Potionheal1;
-        std::cout << "\n";
         std::vector<Pokemon> v_poke;
         v_poke.emplace_back(pika);
         v_poke.emplace_back(bulb);
@@ -106,14 +66,13 @@ int main() {
         pokemon_pool.emplace_back(pika);
         pokemon_pool.emplace_back(bulb);
         pokemon_pool.emplace_back(charm);
-        map m1{p3,1,1,pokemon_pool, map_potions};
+        auto &m1 = map::get_map(p3,1,1,pokemon_pool, map_potions);
         m1.start_game();
         std::cout << curse;
         std::cout << pika.get_HP() << "\n";
         curse.apply_effect(pika);
         std::cout << pika.get_HP();
         def.apply_effect(pika);
-        map m2(m1);
         std::cout << "\n";
         p1.add_potion(haz.clone());
     }
