@@ -4,6 +4,7 @@
 
 #include "map.h"
 #include "exceptii.h"
+#include <random>
 void map::draw(){
     rlutil::cls();
     //rlutil::locate(1, map_size + 1);
@@ -48,16 +49,21 @@ void map::entry_message(){
 }
 
 void map::gen() {
-    layout.resize(map_size);
-    for(auto& v: layout)
-        v.resize(map_size);
-    unsigned int i, j;
-    for (j = 0; j < map_size; j++) {
-        for (i = 0; i < map_size; i++) {
-            if (i == 0 or i == map_size - 1 or j == 0 or j == map_size - 1)
+    // Create a random number generator engine
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+// Define the distribution for generating random numbers
+    std::uniform_int_distribution<int> dist(0, 5);
+
+// Resize and initialize the layout
+    layout.resize(map_size, std::vector<std::string>(map_size));
+    for (unsigned int j = 0; j < map_size; j++) {
+        for (unsigned int i = 0; i < map_size; i++) {
+            if (i == 0 || i == map_size - 1 || j == 0 || j == map_size - 1)
                 layout[i][j] = "%";
-            else{
-                if(rand() % 6 == 0 and i != 1 and j != 1)
+            else {
+                if (dist(gen) == 0 && i != 1 && j != 1)
                     layout[i][j] = "P";
                 else
                     layout[i][j] = ".";
@@ -185,7 +191,13 @@ void map::enemy_turn(Pokemon &player_pokemon, Pokemon &enemy_pokemon) {
     enemy_pokemon.restore_energy();
 }
 bool map::pokemon_encounter() {
-    unsigned int j = rand() % pokemoni.size();
+    // Create a random number generator engine
+    std::random_device rd;
+    std::mt19937 gen(rd());
+// Define the distribution based on the range of your container
+    std::uniform_int_distribution<unsigned int> dist(0, pokemoni.size() - 1);
+// Generate a truly random number
+    unsigned int j = dist(gen);
     Pokemon enemy_pokemon = pokemoni[j], player_pokemon(enemy_pokemon);
     rlutil::setColor(4);
     std::cout << "You have encountered ";

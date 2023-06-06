@@ -25,6 +25,10 @@ int main() {
         Pokemon bulb = pokemon_factory::Bulbasaur();
         Pokemon charm = pokemon_factory::Charmander();
         Healing_Potion Potionheal1{"Lesser Healing Potion", 20 , 3, 30.f};
+        pika.update_damage_dealt_modifier(1.1f);
+        pika.update_damage_taken_modifier(1.1f);
+        pika.reset_damage_dealt_modifier();
+        pika.reset_damage_taken_modifier();
         std::vector<Pokemon> v_poke;
         v_poke.emplace_back(pika);
         v_poke.emplace_back(bulb);
@@ -44,12 +48,9 @@ int main() {
         std::cout << pika.get_card().get_stage() << "\n";
         pika.get_card().increase_stage();
         Energy_Potion energ{"RedBull",20,5,50};
-        std::cout << energ;
         Hazard_Potion haz{"Plague",25,4,20};
-        std::cout << haz;
         Curse_Potion curse{"Mistery Potion", 10, 6, 70, 15};
         Defence_Potion def{"Shield's up!", 30, 2, 1.2f};
-        std::cout << def;
         std::vector<std::shared_ptr<Potion>> map_potions;
         map_potions.emplace_back(Potionheal1.clone());
         map_potions.emplace_back(energ.clone());
@@ -68,13 +69,6 @@ int main() {
         pokemon_pool.emplace_back(charm);
         auto &m1 = map::get_map(p3,1,1,pokemon_pool, map_potions);
         m1.start_game();
-        std::cout << curse;
-        std::cout << pika.get_HP() << "\n";
-        curse.apply_effect(pika);
-        std::cout << pika.get_HP();
-        def.apply_effect(pika);
-        std::cout << "\n";
-        p1.add_potion(haz.clone());
     }
     catch(game_error& err){
         std::cout << err.what();

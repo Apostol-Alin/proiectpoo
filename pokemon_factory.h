@@ -10,7 +10,6 @@ class pokemon_factory {
     static std::vector<Power> puteri_pikachu;
     static std::vector<Power> puteri_bulbasaur;
     static std::vector<Power> puteri_charmander;
-    static std::vector<Carte> carti;
 public:
     static Pokemon Pikachu();
     static Pokemon Bulbasaur();
