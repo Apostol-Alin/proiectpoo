@@ -21,9 +21,9 @@ int main() {
         Power slap{"Slap","just a slap","Physical",5.f,5};
         std::cout << slap.get_power_type();
         auto &factory = pokemon_factory::get_instance();
-        Pokemon pika = pokemon_factory::Pikachu();
-        Pokemon bulb = pokemon_factory::Bulbasaur();
-        Pokemon charm = pokemon_factory::Charmander();
+        Pokemon pika = factory.Pikachu();
+        Pokemon bulb = factory.Bulbasaur();
+        Pokemon charm = factory.Charmander();
         Healing_Potion Potionheal1{"Lesser Healing Potion", 20 , 3, 30.f};
         pika.update_damage_dealt_modifier(1.1f);
         pika.update_damage_taken_modifier(1.1f);
