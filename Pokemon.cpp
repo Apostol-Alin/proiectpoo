@@ -33,12 +33,12 @@ bool Pokemon::can_attack() {
     return false;
 }
 
-[[maybe_unused]] void Pokemon::check_weakness_resistance(const Power& p){
-    if(this->weakness == p.get_power_type())
-        update_damage_taken_modifier(0.9f);
-    if(this->resistance ==  p.get_power_type())
-        update_damage_taken_modifier(1.1f);
-}
+//[[maybe_unused]] void Pokemon::check_weakness_resistance(const Power& p){
+//    if(this->weakness == p.get_power_type())
+//        update_damage_taken_modifier(0.9f);
+//    if(this->resistance ==  p.get_power_type())
+//        update_damage_taken_modifier(1.1f);
+//}
 
 void Pokemon::take_damage(float damage_){
     HP -= damage_ * damage_taken_modifier;
